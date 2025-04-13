@@ -29,7 +29,7 @@ import { AlertCircleIcon } from "@/components/ui/icon";
 import moment from "moment-timezone";
 import TimezoneSelectionModal from "../../modals/TimezoneSelectionModal";
 import { useAppDispatch, useAppSelector } from "@/redux-toolkit/store";
-import { addSlot } from "@/redux-toolkit/slices/slotsSlice";
+import { addSlot, editSlot } from "@/redux-toolkit/slices/slotsSlice";
 import { useToast } from "@/components/ui/toast";
 import useSlotsFormToast from "./completeionToast";
 import { useRouter } from "expo-router";
@@ -75,7 +75,11 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
   } = useFormik<SlotCreationValues>({
     validationSchema: slotCreationSchema,
     onSubmit(values, formikHelpers) {
-      dispatch(addSlot(values));
+      if (currentSlot) {
+        dispatch(editSlot(currentSlot));
+      } else {
+        dispatch(addSlot(values));
+      }
       handleToast();
       handleReset();
     },
