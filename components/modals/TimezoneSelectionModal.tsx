@@ -5,7 +5,7 @@ import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { VStack } from "@/components/ui/vstack";
 
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { getTimeZones, TimezoneInfo } from "@/utils/helpers/dateTimeHelpers";
+import { Text } from "@/components/ui/text";
 
 import { CircleIcon, CloseIcon, SearchIcon } from "@/components/ui/icon";
 import { Heading } from "@/components/ui/heading";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/radio";
 import { Center } from "@/components/ui/center";
 import { Spinner } from "@/components/ui/spinner";
+import { getTimeZones, TimezoneInfo } from "@/utils/helpers/dateTimeHelpers";
 
 type Props = {
   onClose: () => void;
@@ -33,7 +34,7 @@ const TimezoneSelectionModal: React.FC<Props> = ({
 }) => {
   const [timezonesSearchQuery, setTimezonesSearchQuery] = useState("");
   const [timezones, setTimezones] = useState<TimezoneInfo>([]);
-
+  const [loading, setLoading] = useState(false);
   const onDone = () => {
     onClose();
   };
@@ -41,10 +42,14 @@ const TimezoneSelectionModal: React.FC<Props> = ({
   const onReset = () => {
     onChangeTimezone("");
   };
+
   useEffect(() => {
+    //simulate loading
     let timeout: any;
     if (visible) {
+      setLoading(true);
       timeout = setTimeout(() => {
+        setLoading(false);
         setTimezones(getTimeZones());
       }, 500);
     } else {
@@ -117,7 +122,11 @@ const TimezoneSelectionModal: React.FC<Props> = ({
               contentContainerClassName="grow gap-2"
               ListEmptyComponent={() => (
                 <Center className="flex flex-1">
-                  <Spinner size={"large"} />
+                  {loading ? (
+                    <Spinner size={"large"} />
+                  ) : (
+                    <Text>There is no avilable slots for this timezone</Text>
+                  )}
                 </Center>
               )}
               className="flex flex-1"

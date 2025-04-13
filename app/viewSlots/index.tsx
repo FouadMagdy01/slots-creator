@@ -1,21 +1,17 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, useWindowDimensions, View } from "react-native";
 import React, { useMemo, useState } from "react";
 import { Slot, useLocalSearchParams } from "expo-router";
 import { useAppSelector } from "@/redux-toolkit/store";
 import { Input, InputField } from "@/components/ui/input";
 import TimezoneSelectionModal from "@/components/modals/TimezoneSelectionModal";
 import SlotItem from "@/components/atoms/SlotItem";
+
+import { Text } from "@/components/ui/text";
+import { Center } from "@/components/ui/center";
 import {
   createISOString,
   isValidTimeZone,
 } from "@/utils/helpers/dateTimeHelpers";
-import { Center } from "@/components/ui/center";
 import moment from "moment-timezone";
 
 type ViewSlotsScreenParamsType = {

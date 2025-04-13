@@ -8,12 +8,11 @@ export const MMKV_KYS = {
 };
 
 export type Slot = SlotCreationValues & {
-  ui: string;
+  uid: string;
 };
 export class MMKVUtils {
   static getSlots(): Slot[] {
     const localSlots = storage.getString(MMKV_KYS.SLOTS);
-    console.log(JSON.parse(localSlots));
     return (localSlots ? JSON.parse(localSlots) : []) as Slot[];
   }
 
@@ -21,7 +20,6 @@ export class MMKVUtils {
     const localSlots = this.getSlots();
     const updatedSlots: Slot[] = [...localSlots, { ...newSlot }];
     storage.set(MMKV_KYS.SLOTS, JSON.stringify(updatedSlots));
-    console.log("added");
     return updatedSlots;
   }
   static editSlot(updatedSlot: Slot): Slot[] {

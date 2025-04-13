@@ -39,18 +39,14 @@ type Props = {
   slotUid?: string;
 };
 const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
-  // Get current device timezone
   const { slots } = useAppSelector((state) => state.slots);
-  console.log("slotId", slotUid);
-  console.log(
-    createISOString("2024-05-24", "21:00", getCurrentTimezone().timezone)
-  );
-  // Result: "2025-04-08T02:00:00.000Z"
 
   const currentSlot = useMemo(() => {
     return slots.find((slot) => slot.uid === slotUid);
   }, [slots]);
+
   const router = useRouter();
+
   const { timezone: deviceTimezone } = getCurrentTimezone();
   const dispatch = useAppDispatch();
 
@@ -60,11 +56,13 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
   const [dateTimePickerIdentifier, setDateTimePickerIdentifier] = useState<
     "start" | "end"
   >("start");
+
   const { handleToast } = useSlotsFormToast({
     onClickView: () => {
       router.navigate("/viewSlots", {});
     },
   });
+
   const {
     handleChange,
     handleSubmit,
@@ -127,6 +125,8 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
 
   return (
     <VStack className="flex flex-1 mt-4 w-[95%]" space="sm">
+      {/* Timezone selection modal */}
+
       <TimezoneSelectionModal
         onChangeTimezone={(v) => {
           handleChange("timeZone")(v);
@@ -139,6 +139,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
         selectedTimezone={values.timeZone}
         visible={showTimezonesModal}
       />
+      {/* Slot start date and time HStack */}
 
       <HStack className="w-full" space="sm">
         <FormControl
@@ -198,6 +199,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           )}
         </FormControl>
       </HStack>
+      {/* Slot end date and time HStack */}
 
       <HStack className="w-full" space="sm">
         <FormControl
@@ -257,6 +259,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           )}
         </FormControl>
       </HStack>
+      {/* Slot timezone input */}
 
       <FormControl
         className="w-full"
@@ -286,6 +289,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           </FormControlError>
         )}
       </FormControl>
+      {/* Slot break duration input */}
 
       <FormControl
         className="w-full"
@@ -317,6 +321,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           </FormControlError>
         )}
       </FormControl>
+      {/* Slot buffer duration input */}
 
       <FormControl
         className="w-full"
@@ -348,6 +353,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           </FormControlError>
         )}
       </FormControl>
+      {/* Slot duration input */}
 
       <FormControl
         className="w-full"
@@ -433,6 +439,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
         />
       )}
 
+      {/* Form footer */}
       <HStack className="w-full justify-end mb-4" space="xs">
         <Button
           size="md"
