@@ -1,50 +1,96 @@
-# Welcome to your Expo app 👋
+---
+# 📱 Welcome to Your Expo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This project was bootstrapped using [**Create Expo App**](https://www.npmjs.com/package/create-expo-app), which sets up a modern React Native environment with [Expo](https://expo.dev) and [Expo Router](https://docs.expo.dev/router/introduction) for file-based navigation.
+---
 
-## Get started
+## 🚀 Getting Started
 
-1. Install dependencies
+Follow the steps below to set up and run the app on your local machine.
 
-   ```bash
-   npm install
-   ```
+### 1. Install Dependencies
 
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Make sure you have Node.js and npm installed, then run:
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Start the App
 
-## Learn more
+Choose the appropriate platform to run your app:
 
-To learn more about developing your project with Expo, look at the following resources:
+#### For Android:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run android
+```
 
-## Join the community
+#### For iOS:
 
-Join our community of developers creating universal apps.
+```bash
+npm run ios
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Once started, you’ll see options to open the app using:
+
+- 📱 **Development build**  
+  [Learn more](https://docs.expo.dev/develop/development-builds/introduction/)
+
+- 💻 **Android emulator**  
+  [Set up emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+
+- 🖥 **iOS simulator**  
+  [Set up simulator](https://docs.expo.dev/workflow/ios-simulator/)
+
+- 📦 **Expo Go**  
+  A sandbox environment for previewing your app  
+  [Install Expo Go](https://expo.dev/go)
+
+---
+
+## 🌐 Deep Linking
+
+The app supports **deep linking**, allowing you to open specific screens with query parameters directly.
+
+### 🔧 Test Deep Links
+
+Use the following commands in your terminal to simulate deep linking:
+
+#### iOS:
+
+```bash
+npx uri-scheme open slotsCreation://viewSlots?timezone=UTC --ios
+```
+
+#### Android:
+
+```bash
+npx uri-scheme open slotsCreation://viewSlots?timezone=UTC --android
+```
+
+> You can replace `UTC` with any other value to test different behaviors.
+
+Make sure the app is running in a simulator or on a device when executing these commands.
+
+---
+
+## 📦 Sample APK
+
+You can install a development build of the app on a physical Android device using the link below:
+
+👉 [Download APK](https://example.com/your-app.apk)
+
+---
+
+## 🗂 File-Based Routing
+
+This project uses **file-based routing** powered by `expo-router`. To define screens and routes:
+
+1. Navigate to the `app/` directory.
+2. Create a new file or folder that matches your desired route (e.g. `app/viewSlots.tsx`).
+3. Configure screen options using layout files or `export const options = {}` in each screen.
+
+For more information, visit the [Expo Router documentation](https://docs.expo.dev/router/introduction).
+
+---
