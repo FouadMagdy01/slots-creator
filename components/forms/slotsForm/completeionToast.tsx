@@ -45,7 +45,7 @@ export default function useSlotsFormToast({
       id: newId,
       placement: "bottom",
 
-      duration: 300,
+      duration: 3000,
       render: ({ id }) => {
         const uniqueToastId = "toast-" + id;
         return (
