@@ -57,10 +57,16 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
     "start" | "end"
   >("start");
 
+  const navigateToViewSlots = () => {
+    router.navigate("/viewSlots", {});
+  };
   const { handleToast } = useSlotsFormToast({
-    onClickView: () => {
-      router.navigate("/viewSlots", {});
-    },
+    onClickView: navigateToViewSlots,
+    title: currentSlot ? "Slot editted" : "A new slot added",
+    desc: currentSlot
+      ? "Slot have been editted successfully"
+      : "A new slot has been created successfully",
+    showButtons: !!!currentSlot,
   });
 
   const {
@@ -76,7 +82,8 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
     validationSchema: slotCreationSchema,
     onSubmit(values, formikHelpers) {
       if (currentSlot) {
-        dispatch(editSlot(currentSlot));
+        dispatch(editSlot({ ...values, uid: currentSlot.uid }));
+        navigateToViewSlots();
       } else {
         dispatch(addSlot(values));
       }
@@ -123,6 +130,21 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
     };
   }, [values.startDate, values.endDate]);
 
+  const datePickerValue = useMemo(() => {
+    if (dateTimePickerIdentifier === "start") {
+      return currentSlot
+        ? new Date(currentSlot.startDate)
+        : touched.startDate
+        ? new Date(values.startDate)
+        : new Date();
+    } else {
+      return currentSlot
+        ? new Date(currentSlot.endDate)
+        : touched.endDate
+        ? new Date(values.endDate)
+        : new Date();
+    }
+  }, [touched.endDate, touched.startDate, dateTimePickerIdentifier]);
   const handleReset = () => {
     resetForm();
   };
@@ -389,19 +411,11 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           </FormControlError>
         )}
       </FormControl>
-
+      {/* date and time */}
       {showPicker && (
         <DateTimePicker
           mode={pickerMode}
-          value={
-            dateTimePickerIdentifier == "start"
-              ? touched.startDate
-                ? new Date(values.startDate)
-                : new Date()
-              : touched.endDate
-              ? new Date(values.endDate)
-              : new Date()
-          }
+          value={datePickerValue}
           is24Hour
           onChange={(event, selectedDate) => {
             if (event.type == "set" && selectedDate) {

@@ -21,8 +21,16 @@ import { Alert } from "react-native";
 
 type Params = {
   onClickView: () => void;
+  title: string;
+  desc: string;
+  showButtons: boolean;
 };
-export default function useSlotsFormToast({ onClickView }: Params) {
+export default function useSlotsFormToast({
+  onClickView,
+  desc,
+  title,
+  showButtons,
+}: Params) {
   const toast = useToast();
   const [toastId, setToastId] = React.useState(uuidv4());
   const handleToast = () => {
@@ -36,7 +44,8 @@ export default function useSlotsFormToast({ onClickView }: Params) {
     toast.show({
       id: newId,
       placement: "bottom",
-      duration: 5000,
+
+      duration: 300,
       render: ({ id }) => {
         const uniqueToastId = "toast-" + id;
         return (
@@ -51,7 +60,7 @@ export default function useSlotsFormToast({ onClickView }: Params) {
               <VStack space="xs">
                 <HStack className="justify-between">
                   <ToastTitle className="text-typography-900 font-semibold">
-                    New slot added
+                    {title}
                   </ToastTitle>
                   <Button
                     onPress={() => {
@@ -65,33 +74,35 @@ export default function useSlotsFormToast({ onClickView }: Params) {
                   </Button>
                 </HStack>
                 <ToastDescription className="text-typography-700">
-                  A new slot has been created successfully
+                  {desc}
                 </ToastDescription>
               </VStack>
-              <ButtonGroup className="gap-3 flex-row">
-                <Button
-                  action="secondary"
-                  variant="outline"
-                  size="sm"
-                  className="flex-grow"
-                  onPress={() => {
-                    toast.close(id);
+              {showButtons && (
+                <ButtonGroup className="gap-3 flex-row">
+                  <Button
+                    action="secondary"
+                    variant="outline"
+                    size="sm"
+                    className="flex-grow"
+                    onPress={() => {
+                      toast.close(id);
 
-                    onClickView();
-                  }}
-                >
-                  <ButtonText>View slots</ButtonText>
-                </Button>
-                <Button
-                  size="sm"
-                  className="flex-grow"
-                  onPress={() => {
-                    toast.close(id);
-                  }}
-                >
-                  <ButtonText>Done</ButtonText>
-                </Button>
-              </ButtonGroup>
+                      onClickView();
+                    }}
+                  >
+                    <ButtonText>View slots</ButtonText>
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-grow"
+                    onPress={() => {
+                      toast.close(id);
+                    }}
+                  >
+                    <ButtonText>Done</ButtonText>
+                  </Button>
+                </ButtonGroup>
+              )}
             </VStack>
           </Toast>
         );
