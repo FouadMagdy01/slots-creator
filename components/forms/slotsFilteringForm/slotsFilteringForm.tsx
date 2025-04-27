@@ -36,6 +36,7 @@ import {
 } from "@/components/forms/SlotsFilteringForm/schemes";
 
 type PickerMode = IOSNativeProps["mode"];
+
 type Props = {
   onSubmitFilteringForm: (values: SlotsFilterValues) => void;
   isOpen: boolean;

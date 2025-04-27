@@ -20,13 +20,10 @@ import {
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
 import { createDateTime } from "@/utils/helpers/dateTimeHelpers";
-
 import { AlertCircleIcon } from "@/components/ui/icon";
-
 import moment from "moment-timezone";
 import TimezoneSelectionModal from "../../modals/TimezoneSelectionModal";
-import { useAppDispatch, useAppSelector } from "@/redux-toolkit/store";
-import { useToast } from "@/components/ui/toast";
+import { useAppDispatch } from "@/redux-toolkit/store";
 import useSlotsFormToast from "./completeionToastHook";
 import { useRouter } from "expo-router";
 import { generateSlotsFromSlotsForm } from "@/utils/soltsHelpers/slotsGenerationHelpers";
