@@ -1,9 +1,8 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useLayoutEffect } from "react";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Formik } from "formik";
-import CreateSlotsForm from "@/components/forms/slotsForm/slotsCreationForm";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import CreateSlotsForm from "@/components/forms/SlotsCreationForm/SlotsCreationForm";
 type CreatelotsScreenParamsType = {
   slotUid?: string;
 };

@@ -1,10 +1,10 @@
 import { Center } from "@/components/ui/center";
 import { Text } from "@/components/ui/text";
 import { Slot } from "@/utils/helpers/mmkvHelpers";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import { FlatList } from "react-native";
 import SlotItem from "./SlotItem";
-import React from "react"; // make sure React is imported
+import React from "react";
 
 type Props = {
   data: Array<Slot>;

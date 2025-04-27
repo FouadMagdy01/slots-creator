@@ -1,4 +1,4 @@
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useMemo, useState } from "react";
 import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -19,10 +19,7 @@ import {
   FormControlLabelText,
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
-import {
-  createDateTime,
-  getCurrentTimezone,
-} from "@/utils/helpers/dateTimeHelpers";
+import { createDateTime } from "@/utils/helpers/dateTimeHelpers";
 
 import { AlertCircleIcon } from "@/components/ui/icon";
 
@@ -30,7 +27,7 @@ import moment from "moment-timezone";
 import TimezoneSelectionModal from "../../modals/TimezoneSelectionModal";
 import { useAppDispatch, useAppSelector } from "@/redux-toolkit/store";
 import { useToast } from "@/components/ui/toast";
-import useSlotsFormToast from "./completeionToast";
+import useSlotsFormToast from "./completeionToastHook";
 import { useRouter } from "expo-router";
 import { generateSlotsFromSlotsForm } from "@/utils/soltsHelpers/slotsGenerationHelpers";
 import { addGeneratedSlots } from "@/redux-toolkit/slices/slotsSlice";
@@ -94,27 +91,6 @@ const CreateSlotsForm: React.FC = () => {
     setPickerMode(pickerMode);
     setShowPicker(!showPicker);
   };
-
-  // const formattedDateValues = useMemo(() => {
-  //   return {
-  //     startDate:
-  //       values.startDate.length == 0
-  //         ? ""
-  //         : moment(
-  //             createISOString(
-  //               values.startDate,
-  //               values.startTime,
-  //               deviceTimezone
-  //             )
-  //           ).format("YYYY-MM-DD"),
-  //     endDate:
-  //       values.endDate.length == 0
-  //         ? ""
-  //         : moment(
-  //             createISOString(values.endDate, values.endDate, deviceTimezone)
-  //           ).format("YYYY-MM-DD"),
-  //   };
-  // }, [values.startDate, values.endDate]);
 
   const datePickerValue = useMemo(() => {
     if (dateTimePickerIdentifier === "start") {

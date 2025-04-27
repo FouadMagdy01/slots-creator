@@ -8,13 +8,12 @@ import { Alert, AlertIcon, AlertText } from "@/components/ui/alert";
 
 import { Alert as RNAlert, useWindowDimensions } from "react-native";
 import { Button, ButtonText } from "../../ui/button";
-import { useRouter } from "expo-router";
 import { useAppDispatch } from "@/redux-toolkit/store";
 import { deleteSlot } from "@/redux-toolkit/slices/slotsSlice";
 import moment from "moment-timezone";
 import { useMemo } from "react";
 import { InfoIcon } from "lucide-react-native";
-import React from "react"; // make sure React is imported
+import React from "react";
 
 type Props = {
   slotItem: Slot;

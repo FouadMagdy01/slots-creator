@@ -1,10 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useMemo, useState } from "react";
 import DateTimePicker, {
   IOSNativeProps,
 } from "@react-native-community/datetimepicker";
 import { useFormik } from "formik";
-import { slotsFilteringScheme, SlotsFilterValues } from "./schemes";
 import moment from "moment-timezone";
 import { HStack } from "@/components/ui/hstack";
 import {
@@ -29,11 +28,12 @@ import {
 } from "@/components/ui/actionsheet";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
-import {
-  createDateTime,
-  getCurrentTimezone,
-} from "@/utils/helpers/dateTimeHelpers";
+import { createDateTime } from "@/utils/helpers/dateTimeHelpers";
 import { Heading } from "@/components/ui/heading";
+import {
+  slotsFilteringScheme,
+  SlotsFilterValues,
+} from "@/components/forms/SlotsFilteringForm/schemes";
 
 type PickerMode = IOSNativeProps["mode"];
 type Props = {

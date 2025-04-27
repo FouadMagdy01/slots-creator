@@ -20,12 +20,12 @@ import { HStack } from "@/components/ui/hstack";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { ListFilter } from "lucide-react-native";
 
-import SlotsFilteringForm from "@/components/forms/slotsFilteringForm/slotsFilteringForm";
-import { SlotsFilterValues } from "@/components/forms/slotsFilteringForm/schemes";
 import SlotsList from "@/components/organisms/SlotsList//SlotsList";
 import GroupedSlots from "@/components/organisms/GroupedSlots/GroupedSlots";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
+import SlotsFilteringForm from "@/components/forms/SlotsFilteringForm/SlotsFilteringForm";
+import { SlotsFilterValues } from "@/components/forms/SlotsFilteringForm/schemes";
 
 type ViewSlotsScreenParamsType = {
   timezone?: string;

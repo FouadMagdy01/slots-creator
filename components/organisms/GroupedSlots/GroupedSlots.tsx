@@ -2,7 +2,7 @@ import { GroupedSlotsType } from "@/utils/soltsHelpers/slotsGenerationHelpers";
 import GroupItem from "./GroupItem";
 import { Center } from "@/components/ui/center";
 import { Text } from "@/components/ui/text";
-import React from "react"; // make sure React is imported
+import React from "react";
 
 type Props = {
   groupedSlots: GroupedSlotsType;

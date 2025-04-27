@@ -8,14 +8,11 @@ import {
   AccordionTrigger,
   AccordionTitleText,
   AccordionContent,
-  AccordionContentText,
   AccordionIcon,
 } from "@/components/ui/accordion";
-import SlotsList from "../SlotsList/SlotsList";
-import { VStack } from "@/components/ui/vstack/index.web";
-import { Text } from "@/components/ui/text";
+
 import SlotItem from "../SlotsList/SlotItem";
-import React from "react"; // make sure React is imported
+import React from "react";
 
 type Props = {
   groupHeaderName: string;

@@ -17,7 +17,6 @@ import { Icon, CloseIcon } from "@/components/ui/icon";
 import React from "react";
 import { Check } from "lucide-react-native";
 import { v4 as uuidv4 } from "uuid";
-import { Alert } from "react-native";
 
 type Params = {
   onClickView: () => void;
