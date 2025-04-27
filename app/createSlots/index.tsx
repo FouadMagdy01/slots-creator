@@ -19,7 +19,7 @@ export default function Index() {
   }, []);
   return (
     <ScrollView contentContainerClassName="grow items-center bg-white">
-      <CreateSlotsForm slotUid={slotUid} />
+      <CreateSlotsForm />
     </ScrollView>
   );
 }

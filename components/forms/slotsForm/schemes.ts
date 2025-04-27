@@ -42,28 +42,53 @@ export const slotCreationSchema = Yup.object().shape({
     .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "End time must be in HH:mm format")
     .test(
       "is-valid-end-time",
-      "End time must be after start time if on the same day, or the datetime must be later overall",
+      "End time must be after start time and allow for at least one slot duration",
       function (endTime?: string): boolean {
-        const { startTime, startDate, endDate } = this.parent as {
+        const { startTime, startDate, endDate, slotDuration } = this.parent as {
           startTime: string;
           startDate: string;
           endDate: string;
+          slotDuration: string;
         };
 
-        if (!startTime || !endTime || !startDate || !endDate) return true;
+        if (!startTime || !endTime || !startDate || !endDate || !slotDuration)
+          return true;
 
         const { timezone } = getCurrentTimezone();
-        const startDateObj = moment.tz(startDate, timezone);
-        const endDateObj = moment.tz(endDate, timezone);
 
-        // If end date is before start date, fail validation
-        if (endDateObj.isBefore(startDateObj)) return false;
+        const startDateTime = moment.tz(`${startDate}T${startTime}`, timezone);
+        const endDateTime = moment.tz(`${endDate}T${endTime}`, timezone);
 
-        // If dates are different but end date is after start date, validation passes
-        if (startDate !== endDate) return true;
+        // 1. End datetime must be after start datetime
+        if (!endDateTime.isAfter(startDateTime)) {
+          return false;
+        }
 
-        // If dates are the same, ensure end time is after start time
-        return startTime < endTime;
+        // 2. Time part: ensure end time is after start time
+        const [startHours, startMinutes] = startTime.split(":").map(Number);
+        const [endHours, endMinutes] = endTime.split(":").map(Number);
+
+        if (
+          endHours < startHours ||
+          (endHours === startHours && endMinutes <= startMinutes)
+        ) {
+          return false;
+        }
+
+        // 3. Check slot duration fits
+        const slotDurationMinutes = parseInt(slotDuration, 10);
+
+        // Add slot duration to start datetime
+        const minimumEndDateTime = startDateTime
+          .clone()
+          .add(slotDurationMinutes, "minutes");
+
+        // There must be enough time for at least one slot
+        if (!endDateTime.isSameOrAfter(minimumEndDateTime)) {
+          return false;
+        }
+
+        return true;
       }
     ),
 

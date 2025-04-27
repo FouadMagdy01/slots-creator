@@ -22,6 +22,7 @@ import { getTimeZones, TimezoneInfo } from "@/utils/helpers/dateTimeHelpers";
 
 type Props = {
   onClose: () => void;
+  onReset: () => void;
   visible: boolean;
   onChangeTimezone: (timezone: string) => void;
   selectedTimezone: string;
@@ -29,18 +30,19 @@ type Props = {
 const TimezoneSelectionModal: React.FC<Props> = ({
   onClose,
   visible,
+  onReset,
   onChangeTimezone,
   selectedTimezone,
 }) => {
   const [timezonesSearchQuery, setTimezonesSearchQuery] = useState("");
   const [timezones, setTimezones] = useState<TimezoneInfo>([]);
   const [loading, setLoading] = useState(false);
-  const onDone = () => {
+  const handleClose = () => {
     onClose();
   };
 
-  const onReset = () => {
-    onChangeTimezone("");
+  const handleReset = () => {
+    onReset();
   };
 
   useEffect(() => {
@@ -155,11 +157,16 @@ const TimezoneSelectionModal: React.FC<Props> = ({
               size="md"
               variant="outline"
               action="primary"
-              onPress={onReset}
+              onPress={handleReset}
             >
               <ButtonText>Reset!</ButtonText>
             </Button>
-            <Button size="md" variant="solid" action="primary" onPress={onDone}>
+            <Button
+              size="md"
+              variant="solid"
+              action="primary"
+              onPress={handleClose}
+            >
               <ButtonText>Done!</ButtonText>
             </Button>
           </HStack>

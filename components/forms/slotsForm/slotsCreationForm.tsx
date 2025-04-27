@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
 import {
-  createISOString,
+  createDateTime,
   getCurrentTimezone,
 } from "@/utils/helpers/dateTimeHelpers";
 
@@ -29,25 +29,17 @@ import { AlertCircleIcon } from "@/components/ui/icon";
 import moment from "moment-timezone";
 import TimezoneSelectionModal from "../../modals/TimezoneSelectionModal";
 import { useAppDispatch, useAppSelector } from "@/redux-toolkit/store";
-import { addSlot, editSlot } from "@/redux-toolkit/slices/slotsSlice";
 import { useToast } from "@/components/ui/toast";
 import useSlotsFormToast from "./completeionToast";
 import { useRouter } from "expo-router";
+import { generateSlotsFromSlotsForm } from "@/utils/soltsHelpers/slotsGenerationHelpers";
+import { addGeneratedSlots } from "@/redux-toolkit/slices/slotsSlice";
 
 type PickerMode = IOSNativeProps["mode"];
-type Props = {
-  slotUid?: string;
-};
-const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
-  const { slots } = useAppSelector((state) => state.slots);
 
-  const currentSlot = useMemo(() => {
-    return slots.find((slot) => slot.uid === slotUid);
-  }, [slots]);
-
+const CreateSlotsForm: React.FC = () => {
   const router = useRouter();
 
-  const { timezone: deviceTimezone } = getCurrentTimezone();
   const dispatch = useAppDispatch();
 
   const [pickerMode, setPickerMode] = useState<PickerMode>("date");
@@ -62,11 +54,9 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
   };
   const { handleToast } = useSlotsFormToast({
     onClickView: navigateToViewSlots,
-    title: currentSlot ? "Slot editted" : "A new slot added",
-    desc: currentSlot
-      ? "Slot have been editted successfully"
-      : "A new slot has been created successfully",
-    showButtons: !!!currentSlot,
+    title: "A new slots was generated",
+    desc: "A new slots has been generated successfully",
+    showButtons: true,
   });
 
   const {
@@ -81,26 +71,22 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
   } = useFormik<SlotCreationValues>({
     validationSchema: slotCreationSchema,
     onSubmit(values, formikHelpers) {
-      if (currentSlot) {
-        dispatch(editSlot({ ...values, uid: currentSlot.uid }));
-        navigateToViewSlots();
-      } else {
-        dispatch(addSlot(values));
-      }
+      const generatedSlots = generateSlotsFromSlotsForm(values);
+      dispatch(addGeneratedSlots(generatedSlots));
       handleToast();
       handleReset();
     },
     validateOnChange: false,
     validateOnBlur: false,
     initialValues: {
-      breakDuration: currentSlot ? currentSlot.breakDuration : "",
-      bufferDuration: currentSlot ? currentSlot.bufferDuration : "",
-      endDate: currentSlot ? currentSlot.endDate : "",
-      endTime: currentSlot ? currentSlot.endTime : "",
-      slotDuration: currentSlot ? currentSlot.slotDuration : "",
-      startDate: currentSlot ? currentSlot.startDate : "",
-      startTime: currentSlot ? currentSlot.startTime : "",
-      timeZone: currentSlot ? currentSlot.timeZone : "",
+      breakDuration: "",
+      bufferDuration: "",
+      endDate: "",
+      endTime: "",
+      slotDuration: "",
+      startDate: "",
+      startTime: "",
+      timeZone: "",
     },
   });
 
@@ -109,42 +95,41 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
     setShowPicker(!showPicker);
   };
 
-  const formattedDateValues = useMemo(() => {
-    return {
-      startDate:
-        values.startDate.length == 0
-          ? ""
-          : moment(
-              createISOString(
-                values.startDate,
-                values.startTime,
-                deviceTimezone
-              )
-            ).format("YYYY-MM-DD"),
-      endDate:
-        values.endDate.length == 0
-          ? ""
-          : moment(
-              createISOString(values.endDate, values.endDate, deviceTimezone)
-            ).format("YYYY-MM-DD"),
-    };
-  }, [values.startDate, values.endDate]);
+  // const formattedDateValues = useMemo(() => {
+  //   return {
+  //     startDate:
+  //       values.startDate.length == 0
+  //         ? ""
+  //         : moment(
+  //             createISOString(
+  //               values.startDate,
+  //               values.startTime,
+  //               deviceTimezone
+  //             )
+  //           ).format("YYYY-MM-DD"),
+  //     endDate:
+  //       values.endDate.length == 0
+  //         ? ""
+  //         : moment(
+  //             createISOString(values.endDate, values.endDate, deviceTimezone)
+  //           ).format("YYYY-MM-DD"),
+  //   };
+  // }, [values.startDate, values.endDate]);
 
   const datePickerValue = useMemo(() => {
     if (dateTimePickerIdentifier === "start") {
-      return currentSlot
-        ? new Date(currentSlot.startDate)
-        : touched.startDate
-        ? new Date(values.startDate)
-        : new Date();
+      return createDateTime(values.startDate, values.startTime);
     } else {
-      return currentSlot
-        ? new Date(currentSlot.endDate)
-        : touched.endDate
-        ? new Date(values.endDate)
-        : new Date();
+      return createDateTime(values.endDate, values.endTime);
     }
-  }, [touched.endDate, touched.startDate, dateTimePickerIdentifier]);
+  }, [
+    values.startDate,
+    values.startTime,
+    values.endDate,
+    values.endTime,
+    dateTimePickerIdentifier,
+  ]);
+
   const handleReset = () => {
     resetForm();
   };
@@ -154,6 +139,9 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
       {/* Timezone selection modal */}
 
       <TimezoneSelectionModal
+        onReset={() => {
+          handleChange("timeZone")("");
+        }}
         onChangeTimezone={(v) => {
           handleChange("timeZone")(v);
           setFieldTouched("timeZone", true);
@@ -179,7 +167,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
             <InputField
               showSoftInputOnFocus={false}
               placeholder="YYYY-MM-DD"
-              value={formattedDateValues.startDate}
+              value={values.startDate}
               onPressIn={() => {
                 setDateTimePickerIdentifier("start");
                 togglePickerVisibility("date");
@@ -239,7 +227,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
             <InputField
               showSoftInputOnFocus={false}
               placeholder="YYYY-MM-DD"
-              value={formattedDateValues.endDate}
+              value={values.endDate}
               onPressIn={() => {
                 setDateTimePickerIdentifier("end");
                 togglePickerVisibility("date");
@@ -479,7 +467,7 @@ const CreateSlotsForm: React.FC<Props> = ({ slotUid }) => {
           variant="solid"
           action="primary"
         >
-          <ButtonText>{currentSlot ? "Update" : "Add"}</ButtonText>
+          <ButtonText>Add</ButtonText>
         </Button>
       </HStack>
     </VStack>

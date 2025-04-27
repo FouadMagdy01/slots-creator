@@ -91,6 +91,6 @@ This project uses **file-based routing** powered by `expo-router`. To define scr
 2. Create a new file or folder that matches your desired route (e.g. `app/viewSlots.tsx`).
 3. Configure screen options using layout files or `export const options = {}` in each screen.
 
-For more information, visit the [Expo Router documentation](https://expo.dev/accounts/fouadmagdy2001/projects/SlotsCreator/builds/d43034f8-2e68-4e78-9df7-4262ced2d19e).
+For more information, visit the [Expo Router documentation](https://expo.dev/accounts/fouadmagdy2001/projects/SlotsCreator/builds/66700e03-cdd4-4c8e-89f9-9e5ced690c0d).
 
 ---
