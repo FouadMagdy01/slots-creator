@@ -89,36 +89,62 @@ export const filterSlotsByRange = (
 ): GroupedSlotsType => {
   const filteredSlotsByDay: GroupedSlotsType = {};
 
-  const now = moment.tz(timezone);
+  // Safety check for timezone
+  const safeTimezone = timezone || "UTC";
+  const now = moment.tz(safeTimezone);
 
-  let startRange = startRangeStr
-    ? moment.tz(startRangeStr, "YYYY-MM-DD HH:mm", timezone)
-    : now;
-
-  let endRange = endRangeStr
-    ? moment.tz(endRangeStr, "YYYY-MM-DD HH:mm", timezone)
-    : null; // null means no upper limit
-
-  if (!startRange.isValid() || startRange.isBefore(now)) {
-    startRange = now;
+  // Handle empty strings explicitly
+  let startRange;
+  if (startRangeStr && startRangeStr.trim() !== "") {
+    startRange = moment.tz(startRangeStr, "YYYY-MM-DD HH:mm", safeTimezone);
+    if (!startRange.isValid()) {
+      startRange = now.clone();
+    }
+  } else {
+    startRange = now.clone();
   }
 
-  if (endRange && (!endRange.isValid() || endRange.isBefore(startRange))) {
-    endRange = startRange.clone().add(7, "days");
+  // Handle empty strings explicitly for end range
+  let endRange = null; // Default to null (no upper limit)
+  if (endRangeStr && endRangeStr.trim() !== "") {
+    endRange = moment.tz(endRangeStr, "YYYY-MM-DD HH:mm", safeTimezone);
+    if (!endRange.isValid() || endRange.isBefore(startRange)) {
+      endRange = startRange.clone().add(7, "days");
+    }
+  }
+
+  // Ensure startRange is not before now
+  if (startRange.isBefore(now)) {
+    startRange = now.clone();
   }
 
   Object.entries(slotsByDay).forEach(([dayKey, slots]) => {
     const filteredSlots = slots.filter((slot) => {
-      const slotStart = moment.tz(
-        `${slot.startDate} ${slot.startTime}`,
-        "YYYY-MM-DD HH:mm",
-        slot.timeZone
-      );
+      // Ensure we have valid parameters for creating moment
+      if (!slot.startDate || !slot.startTime || !slot.timeZone) {
+        return false;
+      }
 
-      if (endRange) {
-        return slotStart.isBetween(startRange, endRange, undefined, "[]"); // inclusive
-      } else {
-        return slotStart.isSameOrAfter(startRange); // no end limit
+      try {
+        const slotStart = moment.tz(
+          `${slot.startDate} ${slot.startTime}`,
+          "YYYY-MM-DD HH:mm",
+          slot.timeZone
+        );
+
+        if (!slotStart.isValid()) {
+          return false;
+        }
+
+        if (endRange) {
+          return slotStart.isBetween(startRange, endRange, undefined, "[]"); // inclusive
+        } else {
+          return slotStart.isSameOrAfter(startRange); // no end limit
+        }
+      } catch (error) {
+        // Handle any unexpected errors
+        console.warn("Error processing slot:", error);
+        return false;
       }
     });
 

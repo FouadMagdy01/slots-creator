@@ -79,7 +79,7 @@ Make sure the app is running in a simulator or on a device when executing these 
 
 You can install a development build of the app on a physical Android device using the link below:
 
-👉 [Download APK](https://expo.dev/accounts/fouadmagdy2001/projects/SlotsCreator/builds/66700e03-cdd4-4c8e-89f9-9e5ced690c0d)
+👉 [Download APK](https://expo.dev/accounts/fouadmagdy2001/projects/SlotsCreator/builds/c0cb7385-2d1b-4738-b958-5a7d7228dbb8)
 
 ---
 
